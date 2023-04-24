@@ -96,4 +96,43 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 {
 //add your solution here!
 
+	//reached bounds
+	if (r >= board.size() || c >= board.size()){
+		//first check if current word is in dictionary
+		if(dict.find(word) != dict.end()){
+			result.insert(word);
+
+			return true;
+		}
+		//else false
+		return false;
+	}
+
+	//if we have a word of size 0, move to next letter
+	if(word.size() == 0){
+		return boggleHelper(dict, prefix, board, word + board[r][c], result, r + dr, c + dc, dr, dc);
+	}
+	//check if we have a word, but not a prefix
+	if (dict.find(word) != dict.end() && prefix.find(word) == prefix.end()){
+		result.insert(word);
+
+		return true;
+	}
+	//check for prefix
+	else if(prefix.find(word) != prefix.end()){
+		bool wordContinued = boggleHelper(dict, prefix, board, word + board[r][c], result, r + dr, c + dc, dr, dc);
+
+		//if continued word is false with added character, insert word
+		if(wordContinued == false && dict.find(word) != dict.end()){
+			result.insert(word);
+
+			return true;
+		}
+		//else keep going
+		else if(wordContinued == true){
+			return true;
+		}
+	}
+
+	return false;
 }
